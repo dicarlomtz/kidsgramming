@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/students/register', [RegisterStudentController::class, 'registerStudent'])->name('students.register');
     Route::post('/professors/register', [RegisterProfessorController::class, 'registerProfessor'])->name('students.register');
     Route::post('/suscriptions/update', [SuscriptionController::class, 'changeSuscription'])->name('suscriptions.changeSuscription');
+    Route::get('/professors/courses', [CourseController::class, 'listProfessorsPaginated'])->name('professors.courses.listPaginated');
 });
 
 Route::controller(AuthController::class)->group(function () {

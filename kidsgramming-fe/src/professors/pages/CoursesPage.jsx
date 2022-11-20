@@ -8,6 +8,11 @@ import { a11yProps, TabPanel } from '../../ui/components/TabPanel'
 import { useState } from 'react'
 import { Container } from '@mui/material'
 import { CreateCourseForm } from '../views/CreateCourseForm'
+import { NothingToShow } from '../../ui/components/NothingToShow'
+import { Waiting } from '../../ui/components/Waiting'
+import { usePagination } from '../../hooks/usePagination'
+import { PaginationButtons } from '../../ui/components/PaginationButtons'
+import { CoursesList } from '../views/CoursesList'
 
 export const CoursesPage = () => {
   const [value, setValue] = useState(0)
@@ -15,6 +20,11 @@ export const CoursesPage = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
+
+  const {
+    data, maxPages, errorMessage,
+    currentPage, setCurrentPage, loading
+  } = usePagination({ page: 1, endpoint: 'professors/courses?' })
 
   return (
      <>
@@ -32,7 +42,12 @@ export const CoursesPage = () => {
             </AuthLayout>
           </TabPanel>
           <TabPanel value={value} index={1}>
-            Item Two
+            {Boolean(data.length) && !loading && <CoursesList courses={data} />}
+            {!errorMessage && !data.length && !loading && <NothingToShow reason='No data to show' />}
+            {errorMessage && !loading && <NothingToShow reason={ errorMessage } />}
+            {loading && <Waiting />}
+            {Boolean(data.length) && !loading && <PaginationButtons
+              currentPage={currentPage} setCurrentPage={setCurrentPage} maxPages={maxPages} />}
           </TabPanel>
         </Container>
     </>

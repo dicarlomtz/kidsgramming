@@ -28,6 +28,11 @@ class CourseController extends Controller
         return Course::latest()->paginate(8);
     }
 
+    public function listProfessorsPaginated(Request $request)
+    {
+        return Course::where('professor', $request->user()->id)->latest()->paginate(8);
+    }
+
     public function show($id)
     {
         $course = Course::find($id);
